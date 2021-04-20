@@ -1,4 +1,4 @@
-<script>
+<script lang="ts">
   import Chart from 'chart.js'
   import { onMount } from 'svelte'
   import IconPark from './components/IconPark.svelte'
@@ -6,12 +6,19 @@
   import PopupChoosePark from './components/PopupChoosePark.svelte'
   import { chartData, chartOptions } from './config/chart'
   import COLORS from './config/colors'
+  import type { ParkInfo, ParkingLot } from './config/park'
   import { calculateFee } from './functions/fee'
 
-  let chartElement
+  let chartElement: HTMLCanvasElement
   let chart
   let isChoosingPark = false
-  let currentPark
+  let currentPark: {
+    parkId: ParkingLot
+    info: ParkInfo
+    start: Date
+    durationHrs: number
+    fee: number
+  } | undefined
 
   onMount(() => {
     chart = new Chart(chartElement, {
@@ -21,7 +28,7 @@
     })
   })
 
-  function onChoosePark(parkId, parkInfo) {
+  function onChoosePark(parkId: ParkingLot, parkInfo: ParkInfo) {
     // initialize currentDuration
     const currentDuration = 0.001
     // initialize currentFee

@@ -1,6 +1,19 @@
 import COLORS from './colors'
 
-export const parkConfig = {
+export interface FeeRate {
+  hrs: number
+  cost: number
+}
+
+export interface ParkInfo {
+  name: string
+  color: string
+  feeRates: FeeRate[]
+}
+
+export type ParkingLot = 'ICON' | 'SAMYAN' | 'MBK' | 'CTW' | 'SIAM_CEN'
+
+export const parkConfig: Record<ParkingLot, ParkInfo> = {
   ICON: {
     name: 'Icon Siam',
     color: COLORS.PURPLE,
@@ -51,4 +64,4 @@ export const parkConfig = {
   },
 }
 
-export const parkConfigEntries = Object.entries(parkConfig)
+export const parkConfigEntries = Object.entries(parkConfig) as [ParkingLot, ParkInfo][]

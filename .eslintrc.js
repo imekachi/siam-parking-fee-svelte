@@ -5,13 +5,19 @@ module.exports = {
     browser: true,
     es6: true,
   },
-  // parser: 'babel-eslint',
+  parser: '@typescript-eslint/parser',
+  settings: {
+    'svelte3/typescript': require('typescript'),
+  },
   parserOptions: {
     ecmaVersion: 2019,
-    sourceType: 'module',
+    sourceType: 'module'
   },
-  plugins: ['svelte3'],
-  extends: ['eslint:recommended'],
+  plugins: ['svelte3', '@typescript-eslint'],
+  extends: [
+    'eslint:recommended',
+    'plugin:@typescript-eslint/recommended',
+  ],
   overrides: [
     {
       files: ['**/*.svelte'],

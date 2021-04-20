@@ -1,3 +1,4 @@
+import type { ChartOptions } from 'chart.js'
 import { calculateFee } from '../functions/fee'
 import COLORS from './colors'
 import { parkConfig } from './park'
@@ -29,14 +30,14 @@ export const chartData = {
   datasets: feeOverview,
 }
 
-export const chartOptions = {
+export const chartOptions: ChartOptions = {
   maintainAspectRatio: false,
   tooltips: {
     // show all parking fee at the hour
     mode: 'index',
     intersect: false,
     // put cheaper parking to be displayed first
-    itemSort: (a, b) => a.yLabel - b.yLabel,
+    itemSort: (a, b) => (a.yLabel as number) - (b.yLabel as number),
   },
   hover: {
     mode: 'nearest',
