@@ -7,10 +7,13 @@
   export let start: Date
   export let durationHrs: number
   export let fee: number
+  export let onClickLiveButton: () => void
 </script>
 
 <div class="container">
-  <button class="live-button" class:-live={isLive}>LIVE</button>
+  <button class="live-button" class:-live={isLive} on:click={onClickLiveButton}>
+    LIVE
+  </button>
   <h2 class="park-title" style="color: {parkInfo.color};">{parkInfo.name}</h2>
   <div class="park-info-field">
     <span class="label">Check-in:</span>
@@ -18,7 +21,7 @@
   </div>
   <div class="park-info-field">
     <span class="label">Duration:</span>
-    <span class="value">{durationHrs} hrs</span>
+    <span class="value">{durationHrs.toLocaleString()} hrs</span>
   </div>
   <hr class="separator" />
   <div class="park-info-field -summary">

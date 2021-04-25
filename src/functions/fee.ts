@@ -3,7 +3,7 @@ import type { FeeRate } from '../config/park'
 /**
  * calculate parking fee
  */
-export function calculateFee(feeRates: FeeRate[], parkedHrs = 1) {
+export function calculateFee(feeRates: FeeRate[], parkedHrs = 1): number {
   if (!Array.isArray(feeRates)) {
     throw new TypeError(
       `Error! "feeRates" argument for "calculateFee()" should be an array, instead it receives, ${JSON.stringify(
@@ -56,7 +56,7 @@ export interface StorageParkingInfo {
 
 export const storage = {
   key: 'PARKING_TIME_START',
-  store: function (data: StorageParkingInfo) {
+  store: function (data: StorageParkingInfo): void {
     const prevData = this.getData()
     localStorage.setItem(this.key, JSON.stringify({ ...prevData, ...data }))
   },
@@ -72,7 +72,7 @@ export const storage = {
 
     return parsedData
   },
-  reset: function () {
+  reset: function (): void {
     localStorage.removeItem(this.key)
   },
 }
