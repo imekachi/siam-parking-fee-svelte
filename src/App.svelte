@@ -3,22 +3,24 @@
   import { onMount } from 'svelte'
   import IconPark from './components/IconPark.svelte'
   import IconTrash from './components/IconTrash.svelte'
+  import ParkingInfo from './components/ParkingInfo.svelte'
   import PopupChoosePark from './components/PopupChoosePark.svelte'
   import { chartData, chartOptions } from './config/chart'
   import COLORS from './config/colors'
-  import type { ParkInfo, ParkingLot } from './config/park'
+  import type { ParkInfo } from './config/park'
   import { calculateFee } from './functions/fee'
 
-  let chartElement: HTMLCanvasElement
-  let chart
-  let isChoosingPark = false
-  let currentPark: {
-    parkId: ParkingLot
+  interface CurrentParkState {
     info: ParkInfo
     start: Date
     durationHrs: number
     fee: number
-  } | undefined
+  }
+
+  let chartElement: HTMLCanvasElement
+  let chart
+  let isChoosingPark = false
+  let currentPark: CurrentParkState | undefined
 
   onMount(() => {
     chart = new Chart(chartElement, {
@@ -28,14 +30,13 @@
     })
   })
 
-  function onChoosePark(parkId: ParkingLot, parkInfo: ParkInfo) {
+  function onChoosePark(parkInfo: ParkInfo) {
     // initialize currentDuration
     const currentDuration = 0.001
     // initialize currentFee
     const currentFee = calculateFee(parkInfo.feeRates, currentDuration)
 
     currentPark = {
-      parkId,
       info: parkInfo,
       start: new Date(),
       durationHrs: currentDuration,
@@ -57,12 +58,19 @@
   </div>
 
   {#if currentPark}
+    <ParkingInfo
+      parkInfo={currentPark.info}
+      start={currentPark.start}
+      durationHrs={currentPark.durationHrs}
+      fee={currentPark.fee}
+    />
     <button
       class="floating-button _prevent-selection"
       style="background-color: {COLORS.YELLOW}"
       on:click={onResetPark}
     >
-      <IconTrash /> Reset
+      <IconTrash />
+      Reset
     </button>
   {:else}
     <button
@@ -70,7 +78,8 @@
       style="background-color: {COLORS.PURPLE}"
       on:click={() => (isChoosingPark = true)}
     >
-      <IconPark /> Park
+      <IconPark />
+      Park
     </button>
   {/if}
 
@@ -113,7 +122,7 @@
     font-size: 18px;
     font-weight: bold;
     line-height: 1;
-    color: #000;
+    color: #000000;
     text-transform: uppercase;
 
     width: 128px;

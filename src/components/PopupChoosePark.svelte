@@ -18,7 +18,7 @@
       <li
         class="park-list-item _prevent-selection"
         data-park-id={parkId}
-        on:click={() => onChoosePark(parkId, parkInfo)}
+        on:click={() => onChoosePark(parkInfo, parkId)}
       >
         {parkInfo.name}
       </li>
