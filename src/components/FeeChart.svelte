@@ -14,7 +14,7 @@
 </script>
 
 <div class="chart-container">
-  <canvas bind:this={chartElement} height="280"></canvas>
+  <canvas bind:this={chartElement} height="280" />
 </div>
 
 <style>

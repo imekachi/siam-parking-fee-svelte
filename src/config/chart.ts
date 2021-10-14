@@ -1,7 +1,23 @@
 import type { ChartOptions } from 'chart.js'
+import {
+  CategoryScale,
+  Chart,
+  LinearScale,
+  LineController,
+  LineElement,
+  PointElement,
+} from 'chart.js'
 import { calculateFee } from '../functions/fee'
 import COLORS from './colors'
 import { parkConfig } from './park'
+
+Chart.register(
+  LinearScale,
+  CategoryScale,
+  LineController,
+  PointElement,
+  LineElement
+)
 
 const MAX_OVERVIEW_HOURS = 8
 
@@ -14,61 +30,56 @@ export const OVERVIEW_HOURS_ARRAY = Array.from(
 )
 /**
  * This data shows parking fee of each place for each hour you parked
- * { placeName: [array of fee by hours of parking] }
- * @type {Object}
  */
 export const feeOverview = Object.values(parkConfig).map(park => ({
-    label: park.name,
-    data: OVERVIEW_HOURS_ARRAY.map(hours => calculateFee(park.feeRates, hours)),
-    borderColor: park.color,
-    backgroundColor: park.color,
-    fill: false,
-  }))
+  label: park.name,
+  data: OVERVIEW_HOURS_ARRAY.map(hours => calculateFee(park.feeRates, hours)),
+  borderColor: park.color,
+  backgroundColor: park.color,
+  fill: false,
+}))
 
 export const chartData = {
   labels: OVERVIEW_HOURS_ARRAY.map(hour => `${hour} hr${hour > 1 ? 's' : ''}`),
   datasets: feeOverview,
 }
 
-export const chartOptions: ChartOptions = {
+export const chartOptions: ChartOptions<'line'> = {
   maintainAspectRatio: false,
-  tooltips: {
-    // show all parking fee at the hour
-    mode: 'index',
-    intersect: false,
-    // put cheaper parking to be displayed first
-    itemSort: (a, b) => (a.yLabel as number) - (b.yLabel as number),
+  plugins: {
+    tooltip: {
+      // show all parking fee at the hour
+      mode: 'index',
+      intersect: false,
+      // put cheaper parking to be displayed first
+      itemSort: (a, b) => a.parsed.y - b.parsed.y,
+    },
+    legend: {
+      position: 'bottom',
+      labels: {
+        boxWidth: 5,
+        padding: 20,
+        usePointStyle: true,
+      },
+    },
   },
   hover: {
     mode: 'nearest',
     intersect: true,
   },
-  legend: {
-    position: 'bottom',
-    labels: {
-      boxWidth: 5,
-      padding: 20,
-      usePointStyle: true,
-    },
-  },
   scales: {
-    yAxes: [
-      {
-        gridLines: {
-          color: COLORS.GRID,
-          zeroLineColor: COLORS.GRID,
-        },
-        ticks: {
-          beginAtZero: true,
-        },
+    y: {
+      beginAtZero: true,
+      grid: {
+        color: COLORS.GRID,
+        borderColor: COLORS.GRID,
       },
-    ],
-    xAxes: [
-      {
-        gridLines: {
-          color: COLORS.GRID,
-        },
+    },
+    x: {
+      grid: {
+        color: COLORS.GRID,
+        borderColor: COLORS.GRID,
       },
-    ],
+    },
   },
 }
