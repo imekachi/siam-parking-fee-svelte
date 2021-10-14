@@ -1,27 +1,57 @@
 <script lang="ts">
+  import { onDestroy } from 'svelte'
   import COLORS from '../config/colors'
-  import type { ParkInfo } from '../config/park'
+  import { FeeRate, parkConfig } from '../config/park'
+  import { calculateFee } from '../functions/fee'
+  import { formatDuration, getDuration, msToHrs } from '../utils/time'
 
   export let isLive = false
-  export let parkInfo: ParkInfo
+  export let parkId: string
   export let start: Date
-  export let durationHrs: number
-  export let fee: number
-  export let onClickLiveButton: () => void
+  export let onClickLiveButton: (event: MouseEvent) => void
+
+  let name: string
+  let color: string
+  let duration: number
+  let feeRates: FeeRate[]
+  let fee: number
+  
+  function updateDurationAndFee() {
+    duration = getDuration(start)
+    fee = calculateFee(feeRates, msToHrs(duration)) 
+  }
+  
+  $: {
+    const parkInfo = parkConfig[parkId]
+    name = parkInfo.name
+    color = parkInfo.color
+    feeRates = parkInfo.feeRates
+    updateDurationAndFee()
+  }
+
+  let timeoutId: number
+  $: if (isLive) {
+    timeoutId = window.setTimeout(updateDurationAndFee, 1000)
+  } else {
+    clearTimeout(timeoutId)
+  }
+  onDestroy(() => {
+    clearTimeout(timeoutId)
+  })
 </script>
 
 <div class="container">
-  <button class="live-button" class:-live={isLive} on:click={onClickLiveButton}>
+  <button class="live-button" class:-live={isLive} on:click|preventDefault={onClickLiveButton}>
     LIVE
   </button>
-  <h2 class="park-title" style="color: {parkInfo.color};">{parkInfo.name}</h2>
+  <h2 class="park-title" style="color: {color};">{name}</h2>
   <div class="park-info-field">
     <span class="label">Check-in:</span>
     <span class="value">{start.toLocaleString()}</span>
   </div>
   <div class="park-info-field">
     <span class="label">Duration:</span>
-    <span class="value">{durationHrs.toLocaleString()} hrs</span>
+    <span class="value">{formatDuration(duration)}</span>
   </div>
   <hr class="separator" />
   <div class="park-info-field -summary">
@@ -41,7 +71,7 @@
     background-color: #1d1d1d;
     margin-top: 12px;
     padding: 24px;
-    border-radius: var(--radius);
+    border-radius: var(--rounded-radius);
   }
 
   .live-button {

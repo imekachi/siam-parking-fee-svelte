@@ -1,14 +1,14 @@
-<script>
+<script lang="ts">
   import { parkConfigEntries } from '../config/park'
   import { fade, fly } from 'svelte/transition'
 
-  export let onClickBackdrop
-  export let onChoosePark
+  export let onClickBackdrop: () => void
+  export let onChoosePark: (parkId: string) => void
 </script>
 
 <div
   class="backdrop"
-  on:click={onClickBackdrop}
+  on:click|preventDefault={onClickBackdrop}
   transition:fade={{ duration: 300 }}
 />
 <section class="popup" transition:fly={{ y: 40, duration: 300 }}>
@@ -18,7 +18,7 @@
       <li
         class="park-list-item _prevent-selection"
         data-park-id={parkId}
-        on:click={() => onChoosePark(parkInfo, parkId)}
+        on:click={() => onChoosePark(parkId)}
       >
         {parkInfo.name}
       </li>

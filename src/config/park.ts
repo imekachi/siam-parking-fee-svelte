@@ -11,9 +11,7 @@ export interface ParkInfo {
   feeRates: FeeRate[]
 }
 
-export type ParkID = 'ICON' | 'SAMYAN' | 'MBK' | 'CTW' | 'SIAM_CEN'
-
-export const parkConfig: Record<ParkID, ParkInfo> = {
+export const parkConfig: Record<string, ParkInfo> = {
   ICON: {
     name: 'Icon Siam',
     color: COLORS.PURPLE,
@@ -64,4 +62,4 @@ export const parkConfig: Record<ParkID, ParkInfo> = {
   },
 }
 
-export const parkConfigEntries = Object.entries(parkConfig) as [ParkID, ParkInfo][]
+export const parkConfigEntries = Object.entries(parkConfig)
