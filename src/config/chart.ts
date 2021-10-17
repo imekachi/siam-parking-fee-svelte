@@ -6,6 +6,7 @@ import {
   LineController,
   LineElement,
   PointElement,
+  Legend
 } from 'chart.js'
 import { calculateFee } from '../functions/fee'
 import COLORS from './colors'
@@ -16,7 +17,8 @@ Chart.register(
   CategoryScale,
   LineController,
   PointElement,
-  LineElement
+  LineElement,
+  Legend
 )
 
 const MAX_OVERVIEW_HOURS = 8
