@@ -8,7 +8,7 @@ import {
   PointElement,
   Legend
 } from 'chart.js'
-import { calculateFee } from '../functions/fee'
+import { calculateFee } from '../domains/fee'
 import COLORS from './colors'
 import { parkConfig } from './park'
 

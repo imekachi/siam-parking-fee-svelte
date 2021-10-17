@@ -5,7 +5,7 @@
   import ParkingInfo from './components/ParkingInfo.svelte'
   import PopupChoosePark from './components/PopupChoosePark.svelte'
   import ResetButton from './components/ResetButton.svelte'
-  import { storage } from './functions/fee'
+  import { storage } from './domains/fee'
 
   interface CurrentParkState {
     parkId: string

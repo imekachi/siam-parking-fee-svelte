@@ -2,7 +2,7 @@
   import { onDestroy } from 'svelte'
   import COLORS from '../config/colors'
   import { FeeRate, parkConfig } from '../config/park'
-  import { calculateFee } from '../functions/fee'
+  import { calculateFee } from '../domains/fee'
   import { formatDuration, getDuration, msToHrs } from '../utils/time'
 
   export let isLive = false
